@@ -1,12 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fileRouter from '/src/helper/fileRouter'
 
-let styleFiles = {};
-
-fs.readdir('./').forEach(element => {
-    const fileName = element.Name;
-    if (fileName==="index"){return};
-    styleFiles[fileName] = require("../"+fileName);
-});
+let styleFiles = fileRouter('./');
 
 export default styleFiles;
