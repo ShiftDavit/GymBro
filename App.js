@@ -1,9 +1,7 @@
-import AppNavigator from '/src/navigation/AppNavigator'
+import AppNavigator from "./src/navigation/AppNavigator";
 
-export default function App() {
+export default App = () => {
   return (
-  <>
     <AppNavigator />
-  </>  
   );
 }
