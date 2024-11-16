@@ -1,8 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  
-  
   inputLabel: {
     fontWeight: 'bold'
   },
@@ -10,6 +8,7 @@ export default StyleSheet.create({
   input: {
     height: 80,
     padding: 10, 
+    width: '300',
     backgroundColor: '#f5f5f5',
     fontSize: 15,
     borderRadius: 20
