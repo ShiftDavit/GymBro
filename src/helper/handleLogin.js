@@ -1,8 +1,10 @@
+import url from "../api/url.json"
+
 export default async function handleLogin(usr, pswd) {
     try {
         console.log("hello")
 
-        const response = await fetch("http://192.168.1.142:8000/auth/login", {
+        const response = await fetch(url.AUTH_API_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
