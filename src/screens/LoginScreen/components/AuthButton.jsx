@@ -1,10 +1,27 @@
-import { Pressable, Text } from "react-native";
-import styles from "../styles";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import colors from "../../../constants/colors.json"
 
-export default AuthButton = () => {
+export default AuthButton = ({onPress, text}) => {
     return (
-        <Pressable style={styles.button.authButton}>
-            <Text style={{textAlign: 'center', fontWeight: 800, color: 'white', fontSize: 20}}>Log In</Text>
-        </Pressable>
+        <TouchableOpacity style={styles.container} onPress={onPress}>
+            <Text style={styles.text}>{text}</Text>
+        </TouchableOpacity>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: colors.Black,
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 20,
+        height: 64,
+    },
+
+    text: {
+        color: "white",
+        fontSize: 24,
+        fontWeight: 700
+    }
+})
