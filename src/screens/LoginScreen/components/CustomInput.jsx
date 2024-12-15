@@ -1,14 +1,16 @@
 import { TextInput, View, Text } from "react-native";
 import styles from "../styles"
+import colors from "../../../constants/colors.json"
 
-export default CustomInput = (props) => (
-    <View>  
-        <Text style={styles.textbox.inputLabel}>{props.title}</Text>
+export default CustomInput = ({secure, placeholder, onChange}) => (
+    <View style={styles.inputField}>  
 
         <TextInput 
-        style={styles.textbox.input}
-        secureTextEntry = {props.secure}
-        placeholder={props.placeholder}
+        secureTextEntry = {secure}
+        placeholder={placeholder}
+        placeholderTextColor= {"grey"}
+        onChangeText={onChange}
         />
+
     </View>
 );
