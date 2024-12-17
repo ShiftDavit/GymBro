@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import styles from "./styles";
 import CustomInput from './components/CustomInput';
@@ -6,10 +6,18 @@ import Switch from './components/Switch';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AuthButton from './components/AuthButton';
 import handleLogin from '../../helper/handleLogin';
+import {AuthContext} from "../../contexts/AuthContext";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const {login} = useContext(AuthContext)
+
+  async function handle () {
+    const {success} = await handleLogin(username, password)
+    if (success) {login()};
+    console.log(success);
+  }
 
   return (
     <SafeAreaView style={styles.root}>
@@ -37,8 +45,7 @@ export default function LoginPage() {
           text={"Login"} 
           onPress={
             ()=>{
-              const {success} = handleLogin(username, password)
-              if (success) {Alert.alert("Success")}
+              handle();
           }} />
 
 
