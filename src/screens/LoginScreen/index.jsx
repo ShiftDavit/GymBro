@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import styles from "./styles";
-import CustomInput from './components/CustomInput';
-import Switch from './components/Switch';
+import CustomInput from '../../components/CustomInput';
+import Switch from '../../components/Switch';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AuthButton from './components/AuthButton';
+import AuthButton from '../../components/AuthButton';
 import handleLogin from '../../helper/handleLogin';
 import {AuthContext} from "../../contexts/AuthContext";
 
