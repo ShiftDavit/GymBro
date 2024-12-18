@@ -17,15 +17,4 @@ export default styles = StyleSheet.create({
         color: colors.Black
     },
 
-    inputField: {
-        marginBottom: 10,
-        height: 50,
-        width: '100%',
-        borderColor:"grey",
-        borderWidth:2,
-        borderRadius:18,
-        justifyContent: 'center',
-        padding:10,
-        backgroundColor: "white"
-    },
 })
