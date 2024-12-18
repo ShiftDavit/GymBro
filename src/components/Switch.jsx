@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { createContext } from "react";
-import colors from "../../../constants/colors.json"
+import colors from "../constants/colors.json"
 
 const SelectionContext = createContext("Login");
 

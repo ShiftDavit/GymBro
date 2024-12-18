@@ -1,5 +1,5 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import colors from "../../../constants/colors.json"
+import colors from "../constants/colors.json"
 
 export default AuthButton = ({onPress, text}) => {
     return (
