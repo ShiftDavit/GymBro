@@ -6,6 +6,8 @@ import homeimg from "../assets/home.png";
 import settingsimg from "../assets/gear.png";
 import logimg from "../assets/plus.png";
 import React from "react";
+import { LogModalContext, LogModalContextProvider } from "../contexts/LogModalContext";
+import LogModal from "../components/LogModal";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -40,13 +42,18 @@ function LogButton({children, onPress}){
     </Pressable>
 }
 
-export default MainBottomTab = () => {
-    
-    const [logModalVisible, setLogModalVisible] = React.useState(false);
+// After applying wrappers
+export default Final = () => (
+    <LogModalContextProvider>
+        <MainBottomTab />
+    </LogModalContextProvider>
 
-    function handleLogModal(s){
-        setLogModalVisible(s);
-    }
+)
+
+// Main content
+const MainBottomTab = () => {
+    
+    const {setLogModalVisible} = React.useContext(LogModalContext);
 
     return(
     <>
@@ -76,7 +83,7 @@ export default MainBottomTab = () => {
                     tabPress: (e) => {
                         e.preventDefault(); // Prevents default tab navigation
                         // Add any additional logic you need when clicking the button
-                        handleLogModal(true);
+                        setLogModalVisible(true);
                         console.log("Plus button clicked!");
                     }})}
                 options= {{
@@ -103,37 +110,9 @@ export default MainBottomTab = () => {
                 
                 />
         </BottomTab.Navigator>
+        
+        <LogModal/>
 
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={logModalVisible}
-            onRequestClose={()=>{handleLogModal(false)}}
-        >
-            <View style={{ 
-                flex: 1,
-                justifyContent: 'center',
-                backgroundColor: 'rgba(0,0,0,0.5)',
-            }}>
-
-            <View style={{
-                backgroundColor: 'white',
-                padding: 20,
-                borderRadius: 10,
-                marginHorizontal: 20,
-                alignItems: 'center',
-            }}>
-
-                <Text>This is a modal overlay</Text>
-
-                <Pressable onPress={()=>{handleLogModal(false)}}>
-                
-                <Text >Close Modal</Text>
-                
-                </Pressable>
-            </View>
-            </View>
-        </Modal>
     </>
 
 )};
