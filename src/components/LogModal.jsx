@@ -29,8 +29,9 @@ export default function LogModal(){
                 onRequestClose={()=>{setLogModalVisible(false)}}
             >
                 <View style={{ 
-                    flex: 1,
-                    flexDirection: "row",
+                    height: "90%",
+                    width: "100%",
+                    flexDirection: "column",
                     alignItems: "flex-end",
                     justifyContent: "center"
                 }}>
@@ -40,15 +41,35 @@ export default function LogModal(){
                         padding: 20,
                         borderRadius: 10,
                         marginHorizontal: 20,
+                        marginVertical: 5,
                         alignItems: 'center',
                         width: "80%",
                     }}>
-
-                        <Text>This is a modal overlay</Text>
-
                         <Pressable onPress={()=>setLogModalVisible(false)}>
                         
-                        <Text >Close Modal</Text>
+                            <Text style={{
+                                fontWeight:700,
+                                fontSize:30
+                            }}>Add Exercise</Text>
+                        
+                        </Pressable>
+                    </View>
+
+                    <View style={{
+                        backgroundColor: 'white',
+                        padding: 20,
+                        borderRadius: 10,
+                        marginHorizontal: 20,
+                        marginVertical: 5,
+                        alignItems: 'center',
+                        width: "80%",
+                    }}>
+                        <Pressable onPress={()=>setLogModalVisible(false)}>
+                        
+                            <Text style={{
+                                fontWeight:700,
+                                fontSize:20
+                            }}>Remove Last Exercise</Text>
                         
                         </Pressable>
                     </View>

@@ -2,6 +2,7 @@ import DashboardScreen from "../screens/DashboardScreen";
 import { SafeAreaView, Image, StyleSheet, Text, View, Pressable, Modal } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SettingsScreen from "../screens/SettingsScreen";
+import LogExerciseScreen from "../screens/LogExerciseScreen"
 import homeimg from "../assets/home.png";
 import settingsimg from "../assets/gear.png";
 import logimg from "../assets/plus.png";
@@ -78,14 +79,14 @@ const MainBottomTab = () => {
 
             <BottomTab.Screen 
                 name = "Add"
-                component={EmptyScreen}
-                listeners={({ navigation }) => ({
-                    tabPress: (e) => {
-                        e.preventDefault(); // Prevents default tab navigation
-                        // Add any additional logic you need when clicking the button
-                        setLogModalVisible(true);
-                        console.log("Plus button clicked!");
-                    }})}
+                component={LogExerciseScreen}
+                // listeners={({ navigation }) => ({
+                //     tabPress: (e) => {
+                //         e.preventDefault(); // Prevents default tab navigation
+                //         // Add any additional logic you need when clicking the button
+                //         setLogModalVisible(true);
+                //         console.log("Plus button clicked!");
+                //     }})}
                 options= {{
                     tabBarIcon: ({ focused, color, size }) => (
 
