@@ -3,53 +3,40 @@ import { Text, FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default DashboardScreen = () => {
-    const [exerciseLog, setExerciseLog] = useState({
-        0: {
-            "name": "Squat",
-            "sets": 5,
-            "reps": 12
-        },
-        1: {
-            "name": "Bench",
-            "sets": 4,
-            "reps": 10
-        }
-
-    })
+    const [exerciseLog, setExerciseLog] = useState([]);
     
-    // useEffect(()=>{
-    //     const fetchedExercises = [
-    //         {
-    //             "name": "Squat",
-    //             "sets": 5,
-    //             "reps": 12
-    //         },
-    //         {
-    //             "name": "Bench",
-    //             "sets": 4,
-    //             "reps": 10
-    //         },
-    //     ]; //fetch using getLoggedExercisesAsync
+    useEffect(()=>{
+        const fetchedExercises = [
+            {
+                "name": "Squat",
+                "sets": 5,
+                "reps": 12
+            },
+            {
+                "name": "Bench",
+                "sets": 4,
+                "reps": 10
+            },
+        ]; //fetch using getLoggedExercisesAsync
 
-    //     setExerciseLog(fetchedExercises.reduce((obj, element, index) => {
-    //         obj[index] = element;
-    //         return obj;
-    //       }, {}));
+        setExerciseLog(fetchedExercises);
 
         
-    // }, [])
+    }, [])
 
     return(
         <SafeAreaView>
             <FlatList
                     data={exerciseLog}
-                    style={{flex:1}}
+                    style={{height:"100%"}}
                     renderItem={({ item }) => (
                       <View
                         style={{
-                          padding: 15,
-                          marginVertical: 5,
-                          borderRadius: 10,
+                            flex:1,
+                            padding: 15,
+                            marginVertical: 5,
+                            borderRadius: 10,
+                            backgroundColor: "red"
                         }}
                       >
                         <Text style={{ fontSize: 18 }}>Name: {item.name}</Text>
