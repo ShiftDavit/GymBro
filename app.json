@@ -11,13 +11,16 @@
     },
     "ios": {
       "infoPlist": {
-        "NSAppTransportSecurity": { "NSAllowsArbitraryLoads": true }
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        }
       },
       "supportsTablet": true
     },
-    
-    "web": {
-    },
-    "newArchEnabled": true
+    "web": {},
+    "newArchEnabled": true,
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }
