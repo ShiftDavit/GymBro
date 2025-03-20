@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, FlatList, TouchableOpacity, SafeAreaView } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, SafeAreaView, ScrollView } from "react-native";
 import Slider from "@react-native-community/slider";
 
 const exercises = [
@@ -37,13 +37,13 @@ const ExercisePickerScreen = () => {
 
   return (
     <>
-    <SafeAreaView style={{ flex: 1, padding: 50 }}>
+    <SafeAreaView style={{ flex: 1, marginTop: 50, marginBottom: 100 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
         Select Exercises
       </Text>
       <FlatList
         data={exercises}
-        style={{flex:1}}
+        style={{flex:2}}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -60,7 +60,7 @@ const ExercisePickerScreen = () => {
         )}
       />
       {Object.values(selectedExercises).length > 0 && (
-        <View style={{ flex:3 }}>
+        <ScrollView style={{ flex:1, borderColor:"black", borderWidth:3 }}>
           <Text style={{ fontSize: 18, fontWeight: "bold" }}>Adjust Sets & Reps</Text>
           {Object.values(selectedExercises).map((exercise) => (
             <View key={exercise.id} style={{ marginVertical: 10 }}>
@@ -98,7 +98,7 @@ const ExercisePickerScreen = () => {
               </TouchableOpacity> 
             </View>
           ))}
-        </View>
+        </ScrollView>
       )}
     </SafeAreaView>
     </>
