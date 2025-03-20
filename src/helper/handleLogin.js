@@ -1,4 +1,5 @@
 import url from "../api/urls.json"
+import SecureStore from "expo-secure-store"
 
 export default async function handleLogin(usr, pswd) {
     try {
@@ -16,6 +17,12 @@ export default async function handleLogin(usr, pswd) {
         }
 
         const data = await response.json();
+        const token = data.token
+
+        if (token){
+            await SecureStore.setItemAsync("jwt", token);
+            console.log('Successfully stored jwt.');
+        }
 
         return data;
     } catch (error) {
