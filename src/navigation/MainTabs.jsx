@@ -9,6 +9,8 @@ import logimg from "../assets/plus.png";
 import React from "react";
 import { LogModalContext, LogModalContextProvider } from "../contexts/LogModalContext";
 import LogModal from "../components/LogModal";
+import { useNavigation } from '@react-navigation/native';
+import TabBar from "../components/TabBar"
 
 const BottomTab = createBottomTabNavigator();
 
@@ -20,16 +22,7 @@ function LogButton({children, onPress}){
     
 
     return <Pressable
-    style={{
-        top: -30,
-        justifyContent: 'center',
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 5 },
-        shadowOpacity: 0.3,
-        shadowRadius: 5,
-        elevation: 10,
-      }}
+    style={styles.logButton}
       
     onPress={onPress}>
         <View
@@ -52,7 +45,7 @@ export default Final = () => (
 )
 
 // Main content
-const MainBottomTab = () => {
+const MainBottomTab = ({navigation}) => {
     
     const {setLogModalVisible} = React.useContext(LogModalContext);
 
@@ -64,29 +57,28 @@ const MainBottomTab = () => {
                 tabBarShowLabel: false,
                 tabBarStyle: styles.tabBar
             }}
+
+            tabBar={props=>(<TabBar {...props}/>)}
         >    
             <BottomTab.Screen 
                 name="Dashboard"
                 component={DashboardScreen}
-                options={{
-                    tabBarIcon: ({ focused, color, size }) => (
-                        <View style={{alignItems: 'center'}}>
-                            <Image source={homeimg} style={{tintColor: color, width: focused?30:25, height: focused?30:25}} />
-                            <Text style={{fontSize:10}}>HOME</Text>
-                        </View>
-                    )
-                }}/>
+                // options={{
+                //    
+                // }}
+                />
 
             <BottomTab.Screen 
                 name = "Add"
-                component={LogExerciseScreen}
-                // listeners={({ navigation }) => ({
-                //     tabPress: (e) => {
-                //         e.preventDefault(); // Prevents default tab navigation
-                //         // Add any additional logic you need when clicking the button
-                //         setLogModalVisible(true);
-                //         console.log("Plus button clicked!");
-                //     }})}
+                component={EmptyScreen}
+                listeners={({ navigation }) => ({
+                    tabPress: (e) => {
+                        e.preventDefault(); // Prevents default tab navigation
+                        // Add any additional logic you need when clicking the button
+                        // setLogModalVisible(true);
+                        navigation.navigate("LogExerciseScreen")
+                        console.log("Plus button clicked!");
+                    }})}
                 options= {{
                     tabBarIcon: ({ focused, color, size }) => (
 
@@ -103,16 +95,14 @@ const MainBottomTab = () => {
                 component={SettingsScreen}
                 options={{
                     headerShown: true,
-                    tabBarIcon: ({ focused, color, size }) => (
-                        <Image source={settingsimg} style={{tintColor: color, width: focused?30:25, height: focused?30:25}} />
-                    )
+                    
                 }}
                 
                 
                 />
         </BottomTab.Navigator>
         
-        <LogModal/>
+        <LogModal navigation = {navigation}/>
 
     </>
 
@@ -120,12 +110,16 @@ const MainBottomTab = () => {
 
 const styles = StyleSheet.create({
     tabBar: {
-        position: 'absolute',
-        margin: 20,
-        bottom: 25,
-        paddingTop: 15,
-        alignItems: 'space-between',
+        flexDirection: "row"
+    },
+
+    logButton: {
         justifyContent: 'center',
-        borderRadius: 20
-    }
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+        elevation: 0,
+      }
 });
