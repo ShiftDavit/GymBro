@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Text, FlatList, View, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import getLoggedExercisesAsync from "../../helper/getLoggedExercisesAsync"
 import colors from "../../constants/colors.json"
 import { StatusBar } from "expo-status-bar";
-
+import { ExerciseListContext } from "../../contexts/ExerciseListContext";
+import { LineChart } from "react-native-gifted-charts";
 
 const ExerciseListItem = ({item}) => {
     if (!item) return null;
@@ -18,12 +19,22 @@ const ExerciseListItem = ({item}) => {
         backgroundColor: colors.Grey
     }}
   >
-    <View style={{flex:1, alignItems:"center", justifyContent:"center", marginBottom: 10}}>
+    <View style={{flex:1, alignItems:"center", justifyContent:"center", marginBottom: 5}}>
         <Text style={{ fontSize: 24, fontWeight:800, color: "white" }}>{item.name}</Text>
     </View>
 
+    <View style={{flex:1, backgroundColor: "white"}}/>
+
     <View style={{flex:1, flexDirection:"row", justifyContent:"center"}}>
         <View style={{flex:1, alignItems:"center"}}>
+            <Text style={{ fontSize: 15, fontWeight:700, color: "white", marginBottom:10 }}>Sets: {item.sets || "N/A"} | Reps: {item.reps || "N/A"} | Weight: {item.weight || "N/A"} lbs</Text>
+            <Text style={{ fontSize: 15, fontWeight:700, color: "white"}}>
+              {
+                new Date(item.date).toLocaleDateString()
+              }
+            </Text>
+        </View>
+        {/* <View style={{flex:1, alignItems:"center"}}>
             <Text style={{ fontSize: 20, fontWeight:700, color: "white", marginBottom:10 }}>Sets</Text>
             <Text style={{ fontSize: 18, fontWeight:600, color: "white"  }}>{item.sets || "N/A"}</Text>
         </View>
@@ -40,11 +51,13 @@ const ExerciseListItem = ({item}) => {
         <View style={{flex:1, alignItems:"center"}}>
             <Text style={{ fontSize: 20, fontWeight:700, color: "white", marginBottom:10 }}>Reps</Text>
             <Text style={{ fontSize: 18, fontWeight:600, color: "white"  }}>{item.reps || "N/A"}</Text>
-        </View>
+        </View> */}
     </View>
     
   </View>
 }
+
+const selectedExercise = "Bench Press"
 
 const Card = ({title, children, contentStyle}) => (
     <View style={styles.card}>
@@ -58,41 +71,40 @@ const Card = ({title, children, contentStyle}) => (
 )
 
 export default DashboardScreen = () => {
-    const [exerciseLog, setExerciseLog] = useState([]);
+    const {ExerciseList, updateExerciseList} = useContext(ExerciseListContext);
+    const [exerciseData, setExerciseData] = useState([]);
+    const [graphData, setGraphData] = useState([]);
     
+    const transformData = (workouts) => {
+
+      const finalList = [];
+
+      for (let item of workouts){
+        for (let ex of item.exercises){
+          finalList.push({...ex, date: item.date})
+        }
+      }
+
+      return finalList.sort((a,b) => (new Date(b.date).getTime() - new Date(a.date).getTime()))
+    };
+
+    const transformToGraphData = (data, exerciseName) => {
+
+      const newData = [...data]
+
+      return newData.sort((a,b) => (-new Date(b.date).getTime() + new Date(a.date).getTime())).map(ex => {
+        if (ex.name!==exerciseName)return null
+        return {value: ex.sets*ex.reps*ex.weight, label: new Date(ex.date).toLocaleDateString()}
+      }).filter(Boolean)
+    }
+
     useEffect(()=>{
-        const fetchedExercises = [
-            {
-                "name": "Squat",
-                "sets": 5,
-                "reps": 12,
-                "weight": 315
-            },
-            {
-                "name": "Bench",
-                "sets": 4,
-                "reps": 10,
-                "weight": 225
-            },
-            {
-                "name": "Deadlift",
-                "sets": 5,
-                "reps": 3, 
-                // "weight": 405
-            },
-            {
-                "name": "Deadlift",
-                "sets": 5,
-                "reps": 3, 
-                // "weight": 405
-            },
-        ]; //default list, fetch using getLoggedExercisesAsync
+        const data = transformData(ExerciseList)
+        setExerciseData(data);
 
-        //fetchedExercises = getLoggedExercisesAsync()
-
-        setExerciseLog(fetchedExercises);
-
-    }, [])
+        const graphData = transformToGraphData(data, selectedExercise);
+        setGraphData(graphData);
+  }, [selectedExercise, ExerciseList]);
 
     return(
         <SafeAreaView style={{backgroundColor: "gainsboro", padding:10}}>
@@ -101,11 +113,31 @@ export default DashboardScreen = () => {
             <ScrollView
                 style={{height: "100%"}}            
             >
+
+                <Card title={"Progress Chart"+" "+selectedExercise}>
+                    <LineChart
+                        data={graphData}
+                        width={250}
+                        spacing={70}
+                        yAxisLabelSuffix=" lbs"
+                        xAxisLabelTextStyle={{ marginLeft: 10, fontSize: 10 }}
+                        yAxisLabelTextStyle={{fontSize: 10}}
+                        yAxisLabelWidth={60}
+                        noOfSections={4}
+                        xAxis
+                        showValuesAsDataPoints
+                        thickness={3}
+                        color="#007AFF"
+                        // isAnimated
+                        // animationDuration={500}
+                        />
+                </Card>
+
                 <Card title="Exercise History">
                     <FlatList
-                        data={exerciseLog || []}
-                        horizontal
-                        keyExtractor={(item, index) => item.id?.toString() || index.toString()}
+                        data={exerciseData || []}
+                        vertical
+                        //keyExtractor={(item, index) => item.id?.toString() || Math.floor(Math.random() * 100).toString()}
                         renderItem={({ item }) => (
                         <ExerciseListItem item={item} />
                         )}
@@ -115,19 +147,7 @@ export default DashboardScreen = () => {
                     />
                 </Card>
 
-                <Card title="Exercise History">
-                    <FlatList
-                        data={exerciseLog || []}
-                        horizontal
-                        keyExtractor={(item, index) => item.id?.toString() || index.toString()}
-                        renderItem={({ item }) => (
-                        <ExerciseListItem item={item} />
-                        )}
-                        style={{ flex: 1 }}
-                        contentContainerStyle={{ paddingHorizontal: 16 }}
-                        showsHorizontalScrollIndicator={false}
-                    />
-                </Card>
+               
             </ScrollView>
 
         </SafeAreaView>
@@ -137,26 +157,26 @@ export default DashboardScreen = () => {
 const styles = StyleSheet.create({
     card: {
         flex:1,
-      borderRadius: 8,
+      borderRadius: 10,
       backgroundColor: '#fff',
       shadowColor: '#000',
-      shadowOpacity: 0.1,
-      shadowRadius: 6,
-      shadowOffset: { width: 0, height: 2 },
-      elevation: 3,
+      shadowOpacity:0.4,
+        elevation: 2,
+        shadowRadius: 4,
       margin: 8,
-      marginVertical: 8,
-      overflow: 'hidden',
+      //marginVertical: 8,
+      overflow: 'visible',
     },
     header: {
       padding: 16,
-      backgroundColor: '#f9f9f9',
+      flex:1
     },
     title: {
       fontSize: 18,
       fontWeight: 'bold',
     },
     content: {
+        flex:1,
       padding: 16,
     },
   });
