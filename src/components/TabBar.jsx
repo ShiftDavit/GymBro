@@ -1,6 +1,6 @@
-import { View, Platform, Image } from 'react-native';
+import { View, Platform, Image, Pressable } from 'react-native';
 import { useLinkBuilder, useTheme } from '@react-navigation/native';
-import { Text, PlatformPressable } from '@react-navigation/elements';
+import { Text} from '@react-navigation/elements';
 import { StyleSheet } from 'react-native';
 import { useEffect, useState } from 'react';
 import colors from "../constants/colors.json"
@@ -8,13 +8,20 @@ import Animated, {interpolate, useAnimatedStyle, useSharedValue, withSpring} fro
 
 import homeimg from "../assets/home.png";
 import settingsimg from "../assets/gear.png";
+import plusimg from "../assets/plus.png";
 
 export default function TabBar({ state, descriptors, navigation }) {
   const { buildHref } = useLinkBuilder();
 
   const icons = {
     "Dashboard": homeimg,
-    "Settings": settingsimg
+    "Settings": settingsimg,
+    "Add": plusimg
+  }
+
+  const titles = {
+    "Dashboard": "Home",
+    "Settings": "Settings"
   }
 
 
@@ -32,6 +39,7 @@ export default function TabBar({ state, descriptors, navigation }) {
 
         const isFocused = state.index === index;
         const icon = icons[label]
+        const title = titles[label]
 
         const onPress = () => {
           const event = navigation.emit({
@@ -76,21 +84,23 @@ export default function TabBar({ state, descriptors, navigation }) {
         })
 
         return (
-          <PlatformPressable
+          <Pressable
             href={buildHref(route.name, route.params)}
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
             testID={options.tabBarButtonTestID}
             onPress={onPress}
+            key={index}
             onLongPress={onLongPress}
             style={styles.tabItem}
           >
 
-            <Animated.Image source={icon} style={[animatedIconStyle,{width: 30, height: 30}]} />
-            <Animated.Text style={[animatedTextStyle, { color: isFocused ? colors.primary : colors.text, fontSize: 12 }]}>
-              {label}
-            </Animated.Text>
-          </PlatformPressable>
+            <Animated.Image source={icon} style={[animatedIconStyle,{width: label!="Add" && 30 || 50, height: label!="Add" && 30 || 50}]} />
+              <Animated.Text style={[animatedTextStyle, { color: isFocused ? colors.primary : colors.text, fontSize: 12 }]}>
+                {title || null}
+              </Animated.Text>
+              
+          </Pressable>
         );
       })}
     </View>
@@ -106,6 +116,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 50,
         borderRadius: 50,
         padding: 15,
+        paddingBottom: 0,
         shadowOpacity:0.3,
         elevation: 2,
         shadowRadius: 10
