@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, SafeAreaView, ScrollView } from "react-native";
 import Slider from "@react-native-community/slider";
+import { ExerciseListContext } from "../../contexts/ExerciseListContext";
 
 const exercises = [
   { id: "1", name: "Squats" },
@@ -12,6 +13,7 @@ const exercises = [
 
 const ExercisePickerScreen = () => {
   const [selectedExercises, setSelectedExercises] = useState({});
+  const {ExerciseList, updateExerciseList} = useContext(ExerciseListContext);
 
   const toggleExercise = (exercise) => {
     setSelectedExercises((prev) => {
@@ -20,10 +22,21 @@ const ExercisePickerScreen = () => {
         delete updated[exercise.id];
         return updated;
       } else {
-        return { ...prev, [exercise.id]: { ...exercise, sets: 3, reps: 10 } };
+        return { ...prev, [exercise.id]: { ...exercise, sets: 3, reps: 10, weight: 100 } };
       }
     });
   };
+
+  const logExercise = (exercise) => {
+    toggleExercise(exercise)
+
+    updateExerciseList([...ExerciseList, {
+      date: new Date().toISOString(),
+      exercises: [
+        exercise
+      ]
+    }])
+  }
 
   const updateSetsReps = (id, type, value) => {
     setSelectedExercises((prev) => ({
@@ -37,7 +50,7 @@ const ExercisePickerScreen = () => {
 
   return (
     <>
-    <SafeAreaView style={{ flex: 1, marginTop: 50, marginBottom: 100 }}>
+    <SafeAreaView style={{ flex: 1, marginTop: 10, marginBottom: 0 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
         Select Exercises
       </Text>
@@ -82,8 +95,17 @@ const ExercisePickerScreen = () => {
                 onValueChange={(value) => updateSetsReps(exercise.id, "reps", value)}
               />
 
+              <Text>Weight: {exercise.weight}</Text>
+              <Slider
+                minimumValue={0}
+                maximumValue={1000}
+                step={5}
+                value={exercise.weight}
+                onValueChange={(value) => updateSetsReps(exercise.id, "weight", value)}
+              />
+
               <TouchableOpacity
-              onPress={() => toggleExercise(exercise)}
+              onPress={() => logExercise(exercise)}
                 style={{
                   padding: 15,
                   marginVertical: 5,
